@@ -1,6 +1,5 @@
 \.idea/
 nbproject
-wp-config.php
 wp-content/updraft
 !/wp-content/uploads/certificate/.htaccess
 !/wp-content/uploads/invoice/.htaccess
