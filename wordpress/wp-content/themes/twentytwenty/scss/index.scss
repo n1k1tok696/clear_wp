@@ -1,0 +1,559 @@
+/////////////////////////////////////
+//////////// Variables //////////////
+/////////////////////////////////////
+
+/**
+ * Colors
+ */
+ $brandColor: #6ADAF7;
+ $brandColorRed: #FF5056;
+ $brandDarkBlue: #11253c;
+ 
+ $brandLightGray: #f1f3f4;
+ $brandMediumGray: #667482;
+ $brandDarkGray: #30383F;
+ $brandTextColor: $brandDarkGray;
+ $dangerRed: #c0392b;
+ $successGreen: #40d47e;
+ $brandBorderColor: lighten($brandMediumGray, 40%);
+ $lightBlueBorder: lighten($brandColor, 15%);
+ // $lightBlueBackground: rgba($brandColor, 0.1);
+ $lightBlueBackground: #F7FBFC;;
+ // $lightBlueBackground: #FAFDFD;
+ 
+ 
+ $textFieldColor: #D1D5D9;
+ 
+ /**
+  * Fonts
+  */
+   $siteFontFamily: 'Lato', 'Helvetica Neue', Helvetica;
+   $headersFontFamily: $siteFontFamily;
+ 
+ /**
+  * Screen sizes
+  */
+   $screen-sm-min: 767px;
+   $screen-md-min: 992px;
+   $screen-lg-min: 1200px;
+   $smartphone-width: 600px;
+   $mobile-nav-width: 900px;
+ 
+ /**
+  * Header
+  */
+ 
+ // Header heights
+ $headerHeightStuck: 82px;
+ $headerHeightDesktop: 110px;
+ $headerHeightSmallerDesktop: 100px;
+ $headerHeightTablet: 100px;
+ $headerHeightSmartphone: $headerHeightStuck;
+ 
+ // Logo heights
+ $headerLogoHeightStuck: 42px;
+ $headerLogoHeightDesktop: 46px;
+ $headerLogoHeightSmallerDesktop: 40px;
+ $headerLogoHeightTablet: 40px;
+ $headerLogoHeightSmartphone: 28px;
+
+@mixin transition($transition-property, $transition-time, $method) {
+  -webkit-transition: $transition-property $transition-time $method;
+  -moz-transition: $transition-property $transition-time $method;
+  -ms-transition: $transition-property $transition-time $method;
+  -o-transition: $transition-property $transition-time $method;
+  transition: $transition-property $transition-time $method;
+}
+
+@mixin respond-to($media) {
+  @if $media == handhelds {
+    @media only screen and (max-width: $screen-sm-min) { @content; }
+  }
+  @else if $media == tablets {
+    @media only screen and (min-width: $screen-sm-min) and (max-width: $screen-md-min) { @content; }
+  }
+  @else if $media == screens {
+    @media only screen and (min-width: $screen-md-min) and (max-width: $screen-lg-min) { @content; }
+  }
+  @else if $media == wide-screens {
+    @media only screen and (min-width: $screen-lg-min) { @content; }
+  }
+  @else {
+    @media only screen and (max-width: $media) { @content; }
+  }
+}
+
+#proposalPopUp {
+  display: none;
+	opacity: 0;
+	visibility: hidden;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 9999;
+	color: #FFF;
+	background: rgba(#000, 0.60);
+	height: 100%;
+	overflow: -moz-scrollbars-vertical;
+	overflow-y: scroll;
+	@include transition(all, 0.15s, ease);
+
+    -webkit-user-select: none; /* Chrome/Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+ */
+
+    /* Not implemented yet */
+    -o-user-select: none;
+    user-select: none;
+
+    &.showPopUp {
+    	visibility: visible;
+    	opacity: 1;
+    	@include transition(all, 0.3s, ease);
+    }
+
+	@include respond-to($smartphone-width) {
+		font-size: 0.9em;
+	}
+
+
+	.proposal-striped-line {
+		position: absolute;
+		height: 3px;
+		// background-image: url('img/striped-line.svg');
+		background-repeat: repeat-x;
+		right: 0;
+		left: 0;
+		z-index: 0;
+		margin: 25px -16px 0 -14px;
+	}
+
+
+	.progressBarContainer {
+		@include transition(all, 0.3s, ease);
+		opacity: 1;
+		margin: 0 0 60px;
+
+		&.hide-container {
+			opacity: 0;
+			@include transition(all, 0.3s, ease);
+			display: none;
+		}
+
+		.progressTitle {
+			font-size: 1.4fem;
+			text-align: left;
+			margin-bottom: 8px;
+		}
+
+
+		.progress-planet,.between-planet-line {
+		  display: inline-block;
+		}
+
+		.progress-planet {
+		  position: relative;
+		  // background: #CCC;
+		  border-radius: 100%;
+		  padding: 18px;
+		  margin: 0 10px;
+		  @include transition(all, 0.3s, ease);
+
+		  &:after {
+		    position: absolute;
+		    top: 50%;
+		    left: 50%;
+		    transform: translate(-50%,-50%);
+		    -webkit-transform: translate(-50%,-50%);
+		    -ms-transform: translate(-50%,-50%);
+		    content: "";
+		    border-radius: 100%;
+		    padding: 22px;
+		    border: 2px dashed $brandTextColor;
+		    @include transition(all, 0.3s, ease);
+		  }
+
+		  &.active-planetish {
+		    // background: #1A4490;
+
+		    &.currentlyActiveStep {
+		      transform: scale(1.5);
+		      -webkit-transform: scale(1.5);
+		      -ms-transform: scale(1.5);
+		      margin: 0 20px;
+
+		      img {
+
+				$aimationDuration: 25s;
+
+				-webkit-animation: spinPlanet $aimationDuration linear infinite;
+				-moz-animation: spinPlanet $aimationDuration linear infinite;
+				animation: spinPlanet $aimationDuration linear infinite;
+		      }
+		    }
+			&:after {
+					border-color: $brandColor;
+				}
+			}
+
+			img {
+				position: absolute;
+				width: 100%;
+				top: 0;
+				left: 0;
+			}
+
+			@media screen and (max-width: $screen-sm-min) {
+			  padding: 12px;
+			  margin: 0 6px;
+
+			  &:after {
+			    padding: 17px;
+			  }
+				 &.active-planetish {
+				    &.currentlyActiveStep {
+				      margin: 0 12px;
+				   	}
+		      	}
+			}
+
+		}
+
+		.between-planet-line {
+		  width: 14%;
+		  border-top: 2px dashed $brandTextColor;
+		  margin: 19px 0;
+		  @include transition(all, 0.8s, ease);
+
+		  &.active-planetish {
+		    border-color: $brandColor;
+		  }
+
+			@media screen and (max-width: $screen-sm-min) {
+				margin: 12px 0;
+			}
+
+		}
+
+	}
+
+	.inner {
+		position: relative;
+		// padding: 100px 40px 0 40px;
+		padding: 40px 40px 10px 40px;
+
+		@include respond-to($smartphone-width) {
+			padding-left: 20px;
+			padding-right: 20px;
+		}
+
+	}
+
+	.closeProposal {
+		position: absolute;
+		right: 0;
+		top: 10px;
+		width: 20px;
+
+		&:hover {
+			cursor: pointer;
+		}
+
+		img {
+			width: 100%;
+		}
+
+		@media only screen and (min-width: $screen-md-min) {
+			&:hover {
+				color: $brandColorRed;
+				cursor: pointer;
+
+				a {
+					color: $brandColorRed;
+				}
+			}
+		}
+	}
+
+	.messageView {
+		padding-bottom: 30px;
+	}
+
+	.contentView {
+		position: absolute;
+		top: 45px;
+		left: 50%;
+		padding: 10px 20px 20px 20px;
+		-moz-border-radius: 8px;
+		-webkit-border-radius: 8px;
+		border-radius: 8px;
+		text-align: center;
+		width: 800px;
+		margin-left: -400px;
+		min-width: 280px;
+		font-size: 0.85em;
+
+		@include respond-to($screen-sm-min) {
+			top: 20px;
+		}
+
+		background-color: $brandDarkBlue;
+		background-image: -o-linear-gradient(60deg , rgb(19,37,55) 0%, rgb(47,102,129) 100%);
+		background-image: -moz-linear-gradient(60deg , rgb(19,37,55) 0%, rgb(47,102,129) 100%);
+		background-image: -webkit-linear-gradient(60deg , rgb(19,37,55) 0%, rgb(47,102,129) 100%);
+		background-image: -ms-linear-gradient(60deg , rgb(19,37,55) 0%, rgb(47,102,129) 100%);
+		background-image: linear-gradient(60deg , rgb(19,37,55) 0%, rgb(47,102,129) 100%);
+
+		@include respond-to(850px) {
+			left: 15px;
+			right: 15px;
+			width: auto;
+			margin: 0;
+		}
+
+		@include respond-to(400px) {
+			top: 20px;
+			margin-bottom: 20px;
+		}
+
+		h2 {
+			margin: 0 0 35px 0;
+			font-weight: 700;
+			font-size: 1.8em;
+
+			@include respond-to($smartphone-width) {
+				font-size: 1.7em;
+				font-weight: bold;
+			}
+
+			&.small-margin {
+				margin-bottom: 15px;
+			}
+		}
+
+		.step, .successView, .spinnerView, .errorView {
+			display: none;
+
+			&.activeStep{
+				display: block;
+      }
+      &.stepThree {
+        .small-margin {
+          width: 295px;
+          margin-left: -15px;
+          font-weight: 400;
+        }
+      }
+		}
+
+		.fieldGroup {
+			margin: 0 auto 22px auto;
+			max-width: 325px;
+
+			@include respond-to(400px) {
+				width: 100%;
+			}
+
+			label, input, select {
+				width: 100%;
+			}
+
+			label {
+				font-size: 1.3em;
+				margin-bottom: 8px;
+				font-weight: 700;
+			}
+
+			input, select, .selectric .label {
+				border-radius: 0;
+				-webkit-border-radius: 0;
+				-moz-border-radius: 0;
+				border: 2px solid transparent;
+				outline: 0 !important;
+				background: #FFF;
+				color: $brandMediumGray;
+				font-size: 1.2em;
+				font-weight: 500;
+			}
+
+			input[type=checkbox] {
+				background: none;
+			}
+
+			select {
+				height: 55px;
+				background: #FFF;
+				-webkit-appearance:none;
+				padding-left: 15px;
+			}
+
+			.selectricWrapper {
+
+				&.selectricOpen .label {
+					background: $brandLightGray;
+				}
+
+				.selectricItems ul li:first-child {
+					display: none;
+				}
+			}
+
+			input {
+				padding: 12px 15px;
+			}
+
+			.brand-btn {
+				width: 92%;
+				font-size: 1.3em;
+				position: relative;
+				z-index: 10;
+
+				.fa {
+					margin-left: 9px;
+					font-size: 1.5em;
+					top: 0.09em;
+					position: relative;
+				}
+
+				&.backStep {
+					background: none;
+					border: 2px solid #FFF;
+					margin-top: 15px;
+					font-size: 1em;
+					padding: 10px 15px;
+					opacity: 0.8;
+					display: none; // deactivated
+
+					&:hover {
+						font-weight: bold;
+						background: #FFF;
+						color: $brandColorRed;
+					}
+
+				}
+
+			}
+
+			.invalid-homepage {
+				display: none;
+				color: $brandColorRed;
+				&.invalid {
+					display: inline;
+				}
+			}
+
+			&.invalid .selectric p, &.invalid input {
+				border: 2px solid $brandColorRed;
+			}
+    }
+    .prefer-to-call-wrapper {
+      @media screen and (min-width: 768px) {
+        min-height : 363px;
+        display : table;
+        width : 100%;
+      }
+      .prefer-to-call-inner {
+        @media screen and (min-width: 768px) {
+          display : table-cell;
+          vertical-align : middle;
+        }
+      }
+      .prefer-to-call {
+        background : rgb(255, 255, 255);
+        border-radius : 20px;
+        border : 10px solid rgb(237, 240, 241);
+        color : rgb(0, 0, 0);
+        @media screen and (max-width: 767px) {
+          max-width : 325px;
+          margin : 0px auto;
+        }
+        img {
+          max-width : 61px;
+          margin : 15px 0px 3px 0px;
+          @media screen and (max-width: 767px) { 
+            display: none;
+          }
+        }
+        a {
+          font-size : 20px;
+          font-weight : 700;
+          color : rgb(255, 80, 86);
+          display : block;
+          margin-bottom : 18px;
+          @media screen and (max-width: 767px) {
+            font-size : 16px;
+            padding : 7px 0px;
+            display : block;
+            max-width : 146px;
+            border : 2px solid rgb(255, 80, 86);
+            border-radius : 5px;
+            margin-top : 0px;
+            margin-right : auto;
+            margin-left : auto;
+            margin-bottom : 15px;
+          }
+        }
+        p:nth-of-type(1) {
+          font-size : 20px;
+          font-weight : 700;
+          color : rgb(48, 56, 63);
+          @media screen and (max-width: 767px) {
+            margin-top : 7px;
+            margin-bottom : 7px;
+          }
+        }
+        hr:first-of-type {
+          max-width : 40px;
+          margin : 7px auto 6px auto;
+          border-width : 3px;
+          border-color : rgb(106, 218, 247);
+        }
+        hr:last-of-type {
+          max-width : 205px;
+          border-color : rgb(236, 240, 241);
+          border-width : 1px;
+          margin : 14px auto 10px auto;
+          @media screen and (max-width: 767px) {
+            display: none;
+          }
+        }
+        p:nth-of-type(2) {
+          font-size : 16px;
+          color : rgb(48, 56, 63);
+          max-width : 225px;
+          margin : 0px auto;
+          @media screen and (max-width: 767px) {
+            margin-bottom : 10px;
+            font-size : 14px;
+          }
+        }
+        p:nth-of-type(3) {
+          color : rgb(48, 56, 63);
+          font-size : 16px;
+          font-weight : 700;
+          margin-bottom : 7px;
+          @media screen and (max-width: 767px) {
+            display: none;
+          }
+        }
+      }
+    }   
+  }
+
+	/**
+	 * Layouts
+	 */
+
+	 	// advanced
+     .proposal-advanced-hidden-mobile {
+			@include respond-to($screen-sm-min) {
+				display: none;
+			}
+		}
+
+}
+#proposalPopUp.opened {
+  display: block;
+}
